@@ -2,28 +2,25 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './App.css';
 import { faEnvelope, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
-  
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-
   const [errors, setErrors] = useState({});
   const [passwordStrength, setPasswordStrength] = useState('');
 
-  
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
- 
   const validateForm = () => {
     let formErrors = {};
-    if (!username) formErrors.username = "Username is required.";
-    if (!email) formErrors.email = "Email is required.";
-    else if (!emailRegex.test(email)) formErrors.email = "Invalid email format.";
-    if (!password) formErrors.password = "Password is required.";
-    else if (password.length < 6) formErrors.password = "Password must be at least 6 characters long.";
+    if (!username) formErrors.username = 'Username is required.';
+    if (!email) formErrors.email = 'Email is required.';
+    else if (!emailRegex.test(email)) formErrors.email = 'Invalid email format.';
+    if (!password) formErrors.password = 'Password is required.';
+    else if (password.length < 6) formErrors.password = 'Password must be at least 6 characters long.';
     return formErrors;
   };
 
@@ -46,21 +43,18 @@ function App() {
     return strength;
   };
 
- 
   const handlePasswordChange = (e) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
     setPasswordStrength(evaluatePasswordStrength(newPassword));
   };
 
-  
   const handleSubmit = (e) => {
     e.preventDefault();
     const formErrors = validateForm();
     if (Object.keys(formErrors).length === 0) {
-     
-      console.log('Form submitted successfully', { username, email, password });
-     
+      toast.success('Form submitted successfully');
+
       setUsername('');
       setEmail('');
       setPassword('');
@@ -73,39 +67,39 @@ function App() {
 
   return (
     <>
-      <div className='rform'>
+      <div className="rform">
         <form onSubmit={handleSubmit}>
           <h3>Registration</h3>
-          <div className='input-box'>
+          <div className="input-box">
             <input
               type="text"
-              placeholder='UserName'
+              placeholder="UserName"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-            <FontAwesomeIcon className='icon' icon={faUser} />
+            <FontAwesomeIcon className="icon" icon={faUser} />
             {errors.username && <p className="error">{errors.username}</p>}
           </div>
-          <div className='input-box'>
+          <div className="input-box">
             <input
               type="text"
-              placeholder='Email'
+              placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <FontAwesomeIcon className='icon' icon={faEnvelope} />
+            <FontAwesomeIcon className="icon" icon={faEnvelope} />
             {errors.email && <p className="error">{errors.email}</p>}
           </div>
-          <div className='input-box'>
+          <div className="input-box">
             <input
               type="password"
-              placeholder='Password'
+              placeholder="Password"
               value={password}
               onChange={handlePasswordChange}
             />
-            <FontAwesomeIcon className='icon' icon={faLock} />
+            <FontAwesomeIcon className="icon" icon={faLock} />
             {errors.password && <p className="error">{errors.password}</p>}
-         
+
             {password && (
               <div className={`password-strength ${passwordStrength.toLowerCase()}`}>
                 <p>Password Strength: {passwordStrength}</p>
@@ -113,14 +107,20 @@ function App() {
             )}
           </div>
           <div className="remember-forget">
-            <label><input type="checkbox" />Remember Me</label>
-            <a href="#">Forget Password?</a>
+            <label>
+              <input type="checkbox" />
+              Remember Me
+            </label>
+            <a href="#" onClick={(e) => e.preventDefault()}>Forget Password?</a>
           </div>
-          <button type='submit'>Registration</button>
+          <button type="submit">Registration</button>
           <div className="login-link">
-            <p>Already have an account? <a href="#">Login</a></p>
+            <p>
+              Already have an account? <a href="#" onClick={(e) => e.preventDefault()}>Login</a>
+            </p>
           </div>
         </form>
+        <ToastContainer theme="colored" position="top-center" autoClose={2000} />
       </div>
     </>
   );
